@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Advanced ATS Tracker Pro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <a class="brand" href="/">
+            <span class="brand-icon">A</span>
+            <span>ATS<span class="brand-light">.PRO</span></span>
+        </a>
+        <span class="top-label">RESUME INTELLIGENCE</span>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <div class="eyebrow"><span class="live-dot"></span> SMART CAREER TOOLKIT</div>
+            <h1>Your next opportunity<br>starts with a <span>stronger resume.</span></h1>
+            <p>Compare your resume with a job description, discover skill gaps,<br class="desktop-only"> and make your next application more focused.</p>
+        </section>
+
+        {% if error %}
+        <div class="alert">{{ error }}</div>
+        {% endif %}
+
+        <section class="workspace">
+            <div class="section-heading">
+                <div>
+                    <span class="step-label">01 / ANALYSIS</span>
+                    <h2>Resume match analyzer</h2>
+                    <p>Upload your resume and paste the target job description.</p>
+                </div>
+                <div class="document-icon">▤</div>
+            </div>
+
+            <form method="POST" enctype="multipart/form-data">
+                <label for="resume">YOUR RESUME <span>PDF only · Max 10 MB</span></label>
+                <div class="upload-box">
+                    <input id="resume" type="file" name="resume" accept=".pdf,application/pdf" required>
+                    <div class="upload-hint">
+                        <span class="upload-symbol">↑</span>
+                        <div><strong>Choose your resume PDF</strong><p>Select a text-based PDF from your device.</p></div>
+                    </div>
+                </div>
+
+                <label for="job_description">JOB DESCRIPTION</label>
+                <textarea id="job_description" name="job_description" placeholder="Paste the job responsibilities, required skills and qualifications here..." required>{{ request.form.get('job_description', '') }}</textarea>
+
+                <button type="submit">Analyze my resume <span>→</span></button>
+                <p class="privacy-note">♧ Your resume is processed for this analysis and is not saved by this demo.</p>
+            </form>
+        </section>
+
+        {% if result %}
+        <section class="results">
+            <div class="result-heading">
+                <div>
+                    <span class="step-label">02 / YOUR REPORT</span>
+                    <h2>Analysis overview</h2>
+                </div>
+                <span class="report-tag">ANALYSIS COMPLETE</span>
+            </div>
+
+            <div class="score-card">
+                <div>
+                    <p class="muted">KEYWORD MATCH ESTIMATE</p>
+                    <div class="score-number">{{ result.score }}<span>%</span></div>
+                    <p class="muted">Based on recognized skills in the job description.</p>
+                </div>
+                <div class="score-ring" style="--score: {{ result.score }}%;">
+                    <div class="ring-inner"><strong>{{ result.score }}%</strong><span>MATCH</span></div>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card"><span>Matched skills</span><strong>{{ result.matched|length }}</strong></div>
+                <div class="stat-card"><span>Skills to review</span><strong>{{ result.missing|length }}</strong></div>
+                <div class="stat-card"><span>Resume word count</span><strong>{{ result.word_count }}</strong></div>
+            </div>
+
+            <div class="skills-panel">
+                <h3>Skills found in both</h3>
+                <div class="chips">
+                    {% for skill in result.matched %}<span class="chip">{{ skill }}</span>{% else %}<span class="muted">No matching recognized skills found.</span>{% endfor %}
+                </div>
+            </div>
+
+            <div class="skills-panel">
+                <h3>Skills to review</h3>
+                <div class="chips">
+                    {% for skill in result.missing %}<span class="chip chip-missing">{{ skill }}</span>{% else %}<span class="muted">No recognized skill gaps found.</span>{% endfor %}
+                </div>
+            </div>
+
+            <div class="skills-panel">
+                <h3>Personalized improvement checklist</h3>
+                <ul class="suggestions">{% for suggestion in result.suggestions %}<li>{{ suggestion }}</li>{% endfor %}</ul>
+            </div>
+
+            <p class="disclaimer">This is an indicative keyword estimate, not an employer's official ATS score or a hiring guarantee. Add only skills and experience you genuinely have.</p>
+            <a class="back-link" href="/">← Analyze another resume</a>
+        </section>
+        {% endif %}
+
+        <footer><span>ATS.PRO</span> · Built to help you prepare smarter applications.</footer>
+    </main>
+</body>
+</html>
