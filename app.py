@@ -65,3 +65,22 @@ def profile_update():
 def demo(): return render_template('demo.html')
 init_db()
 if __name__=='__main__': app.run(debug=True)
+
+@app.route("/robots.txt")
+def robots_txt():
+    from flask import Response
+    return Response(
+        "User-agent: *\nAllow: /\nSitemap: https://advanced-ats-tracker-pro.onrender.com/sitemap.xml\n",
+        mimetype="text/plain"
+    )
+
+@app.route("/sitemap.xml")
+def sitemap_xml():
+    from flask import Response
+    xml = """<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://advanced-ats-tracker-pro.onrender.com/</loc></url>
+  <url><loc>https://advanced-ats-tracker-pro.onrender.com/demo</loc></url>
+</urlset>"""
+    return Response(xml, mimetype="application/xml")
+
