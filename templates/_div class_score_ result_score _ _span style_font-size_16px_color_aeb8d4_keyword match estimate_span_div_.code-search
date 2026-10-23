@@ -1,0 +1,15 @@
+# Query: <div class="score">{{ result.score }}% <span style="font-size:16px;color:#aeb8d4">keyword match estimate</span></div>
+# ContextLines: 1
+
+1 result - 1 file
+
+templates\index.html:
+  100  <h2>Analysis results</h2>
+  101: <div class="score">{{ result.score }}% <span style="font-size:16px;color:#aeb8d4">keyw
+  
+<div class="score-bar">
+    <div class="score-fill" style="width: {{ result.score }}%;"></div>
+</div>
+<p class="score-label">Resume compatibility overview</p>
+
+  102  <p style="color:#aeb8d4">Resume words detected: {{ result.word_count }}</p>
